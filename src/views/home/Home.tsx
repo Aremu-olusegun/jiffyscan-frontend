@@ -35,7 +35,7 @@ type UserOp = {
 
 type UserOps = UserOp[]
 
-type rows =  {
+type rows = {
   hash: {
     text: string;
     icon: string;
@@ -57,7 +57,7 @@ type columns = {
 type dailyMetrics = dailyMetric[]
 
 type dailyMetric = {
-  userOpCounter:  number
+  userOpCounter: number
   totalFeeCollected: number
   daySinceEpoch: number
   bundleCounter: number
@@ -90,6 +90,25 @@ const pages = [
   },
 ];
 
+const networkList = [
+  {
+    name: "Mainnet",
+    key: "mainnet",
+  },
+  {
+    name: "Goerli",
+    key: "goerli",
+  },
+  {
+    name: "Matic",
+    key: "matic",
+  },
+  {
+    name: "Optimism Goerli",
+    key: "optimism-goerli",
+  }
+]
+
 const recentMetrics = [
   {
     id: 1,
@@ -117,12 +136,12 @@ const recentMetrics = [
   },
 ];
 
-const columns: columns =  [
-  {name: "Hash", sort: true},
-  {name: "Age", sort: true},
-  {name: "Sender", sort: false},
-  {name: "Target", sort: false},
-  {name: "Fee", sort: true},
+const columns: columns = [
+  { name: "Hash", sort: true },
+  { name: "Age", sort: true },
+  { name: "Sender", sort: false },
+  { name: "Target", sort: false },
+  { name: "Fee", sort: true },
 ]
 
 const createRowsObject = (userOps: UserOps): any[] => {
@@ -134,21 +153,21 @@ const createRowsObject = (userOps: UserOps): any[] => {
     let timePassedMoment = moment.duration(timePassedInEpoch);
     let timePassed = timePassedMoment.humanize().replace('minutes', 'min') + ' ago';
     rows.push({
-        hash: 
-        {
-              text: userOp.userOpHash,
-              icon: "/images/icon-container (10).svg",
-            },
-        ago: timePassed,
-        sender: userOp.sender,
-        target: userOp.target,
-        fee: {
-              value: userOp.actualGasCost.toString(),
-              gas: {
-                children: "ETH",
-                color: "info",
-              },
-            }
+      hash:
+      {
+        text: userOp.userOpHash,
+        icon: "/images/icon-container (10).svg",
+      },
+      ago: timePassed,
+      sender: userOp.sender,
+      target: userOp.target,
+      fee: {
+        value: userOp.actualGasCost?.toString(),
+        gas: {
+          children: "ETH",
+          color: "info",
+        },
+      }
     });
   }
   return rows;
@@ -159,30 +178,30 @@ const createRowsObject = (userOps: UserOps): any[] => {
 function Home() {
   const { pathname } = useRouter();
   const [rows, setRows] = useState<rows>([]);
-  const [network, setNetwork] = useState('mainnet');
+  const [selectedNetwork, setSelectedNetwork] = useState('mainnet');
   const [dailyMetrics, setDailyMetrics] = useState([] as dailyMetric[]);
   const [userOpMetric, setUserOpMetric] = useState([] as number[]);
   const [walletsCreatedMetric, setWalletsCreatedMetric] = useState([] as number[]);
   const [bundleMetric, setBundleMetric] = useState([] as number[]);
   const [totalFeeCollectedMetric, setTotalFeeCollectedMetric] = useState([] as number[]);
 
-  const getChart = (id:number) => {
-    console.log(id,userOpMetric, totalFeeCollectedMetric, walletsCreatedMetric, bundleMetric)
+  const getChart = (id: number) => {
+    console.log(id, userOpMetric, totalFeeCollectedMetric, walletsCreatedMetric, bundleMetric)
     if (id === 1) {
-      return <Chart chartValues={userOpMetric}/>
+      return <Chart chartValues={userOpMetric} />
     } else if (id === 2) {
-      return <Chart chartValues={totalFeeCollectedMetric}/>
+      return <Chart chartValues={totalFeeCollectedMetric} />
     } else if (id === 3) {
-      return <Chart chartValues={walletsCreatedMetric}/>
+      return <Chart chartValues={walletsCreatedMetric} />
     } else if (id === 4) {
-      return <Chart chartValues={bundleMetric}/>
+      return <Chart chartValues={bundleMetric} />
     }
   }
 
   useEffect(() => {
     fetchUserOps(0, 10);
     fetchDailyMetrics();
-  }, [network]);
+  }, [selectedNetwork]);
 
   useEffect(() => {
     let userOpMetric = []
@@ -199,11 +218,11 @@ function Home() {
     setWalletsCreatedMetric(walletsCreatedMetric)
     setBundleMetric(bundleMetric)
     setTotalFeeCollectedMetric(totalFeeCollectedMetric)
-  },[dailyMetrics])
+  }, [dailyMetrics])
 
   const fetchUserOps = async (pageNo: number, pageSize: number) => {
     const response = await fetch(
-      'https://api.jiffyscan.xyz/v0/getLatestUserOps?network=' + network + '&first=' + pageSize + '&skip=' + pageNo * pageSize
+      'https://api.jiffyscan.xyz/v0/getLatestUserOps?network=' + selectedNetwork + '&first=' + pageSize + '&skip=' + pageNo * pageSize
     );
     const userOpsFromResponse = await response.json();
     if ('userOps' in userOpsFromResponse) {
@@ -217,12 +236,16 @@ function Home() {
 
   const fetchDailyMetrics = async () => {
     const response = await fetch(
-      'https://api.jiffyscan.xyz/v0/GetDailyMetrics?network=' + network + '&noOfDays=4'
+      'https://api.jiffyscan.xyz/v0/GetDailyMetrics?network=' + selectedNetwork + '&noOfDays=4'
     );
     const dailyMetricsResponse = await response.json();
     if ('metrics' in dailyMetricsResponse) {
       setDailyMetrics(dailyMetricsResponse.metrics);
     }
+  }
+
+  const updateNetwork = (network: string) => {
+    setSelectedNetwork(network);
   }
 
   return (
@@ -292,16 +315,11 @@ function Home() {
               <InfoButton />
             </div>
             <div className="flex items-center gap-1">
-              <Chip startIcon="/images/icon-container (4).svg">Goerli</Chip>
-              <Chip color="white" startIcon="/images/icon-container (5).svg">
-                Mumbai
-              </Chip>
-              <Chip color="white" startIcon="/images/icon-container (6).svg">
-                Optimism Goerli
-              </Chip>
-              <Chip color="white" endIcon="/images/icon-container (7).svg">
-                More
-              </Chip>
+              {
+                networkList.map((network) => {
+                  return <Chip onClick={(() => updateNetwork(network.key))} color={network.key == selectedNetwork ? "dark-700" : "white"} startIcon="/images/icon-container (4).svg">{network.name}</Chip>
+                }
+                )}
             </div>
           </div>
           <div className="">
@@ -339,7 +357,7 @@ function Home() {
               <InfoButton />
             </div>
             <div>
-              <Table tableData={{rows, columns}}/>
+              <Table tableData={{ rows, columns }} />
             </div>
           </div>
         </div>

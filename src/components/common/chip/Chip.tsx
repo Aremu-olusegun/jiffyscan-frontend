@@ -8,13 +8,14 @@ export interface ChipProps {
   variant?: "contained" | "outlined";
   color?: "dark-700" | "white" | "info" | "success" | "dark-400";
   className?: string;
+  onClick?: () => void;
 }
 
 function Chip(props: ChipProps) {
   const {children, endIcon, startIcon, variant = "contained", color = "dark-700", className} = props;
 
   return (
-    <div className={`${sx.wrapper} ${sx[variant]} ${sx[color]} ${className || ""}`}>
+    <div onClick={props.onClick} className={`${sx.wrapper} ${sx[variant]} ${sx[color]} ${className || ""}`}>
       {startIcon && <img src={startIcon} alt="" />}
       <span className="flex-1">{children}</span>
       {endIcon && <img src={endIcon} alt="" />}
