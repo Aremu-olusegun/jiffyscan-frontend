@@ -1,4 +1,5 @@
 import React from 'react';
+import Logo from './Logo';
 
 function DesktopHeaderOptions() {
     return (
@@ -17,7 +18,8 @@ export default function Header() {
     return (
         <div className="flex flex-row w-full h-12 m-4">
             <div className="flex flex-row w-full justify-between lg:justify-start">
-                <h1 className="flex p-2 font-bold lg:w-1/6">jiffyscan.xyz</h1>
+                <Logo />
+                {/* <h1 className="flex p-2 font-bold lg:w-1/6">jiffyscan.xyz</h1> */}
                 <h1 className="flex p-2 lg:p-0 font-bold lg:hidden">Menu</h1>
                 <DesktopHeaderOptions />
                 {/* <h1 className="flex font-bold">Home</h1>

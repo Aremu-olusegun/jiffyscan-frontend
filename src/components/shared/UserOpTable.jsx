@@ -1,8 +1,15 @@
-import Image from 'next/image';
-import React from 'react';
+import Image from "next/image";
+import React from "react";
+import CircularProgress from "@mui/material/CircularProgress";
+import { TablePagination } from "@mui/material";
 
-const UserOpTable = ({ columns, rows }) => {
-    if (rows == []) return () => 'no data';
+const UserOpTable = ({ columns, rows, pageDetails }) => {
+    if (rows == [])
+        return () => (
+            <table classNme="shadow-xl border-collapse border-b-2 w-full">
+                <CircularProgress />
+            </table>
+        );
     return (
         <div>
             <table className=" shadow-xl border-collapse border-b-2 w-full">
@@ -19,24 +26,14 @@ const UserOpTable = ({ columns, rows }) => {
                 </thead>
                 <tbody>
                     {rows.map((row, idx) => {
-                        console.log(idx);
                         return (
                             <tr key={idx} className="border-b-2">
                                 {columns.map((col) => {
-                                    console.log(row[col.id]);
-
-                                    if (col.id == 'hash') {
+                                    if (col.id == "hash") {
                                         return (
-                                            <td
-                                                className="text-center"
-                                                key={col.id}
-                                            >
+                                            <td className="text-center" key={col.id}>
                                                 <div className="flex flex-row px-4 space-x-4">
-                                                    <Image
-                                                        src={row.icon}
-                                                        alt="icon"
-                                                        className="w-6 h-6"
-                                                    />
+                                                    <Image src={row.icon} alt="icon" className="w-6 h-6" />
                                                     {row[col.id]}
                                                 </div>
                                             </td>
@@ -44,10 +41,7 @@ const UserOpTable = ({ columns, rows }) => {
                                     }
 
                                     return (
-                                        <td
-                                            className="text-center"
-                                            key={col.id}
-                                        >
+                                        <td className="text-center" key={col.id}>
                                             {row[col.id]}
                                         </td>
                                     );
@@ -57,10 +51,21 @@ const UserOpTable = ({ columns, rows }) => {
                     })}
                 </tbody>
             </table>
+            {pageDetails && (
+                <TablePagination
+                    component="div"
+                    count={100}
+                    page={pageDetails.pageNo}
+                    rowsPerPageOptions={[10, 20, 30]}
+                    onPageChange={pageDetails.handlePageChange}
+                    rowsPerPage={pageDetails.pageSize}
+                    onRowsPerPageChange={pageDetails.handlePageSizeChange}
+                />
+            )}
         </div>
     );
 };
 
-UserOpTable.displayName = 'UserOpTable';
+UserOpTable.displayName = "UserOpTable";
 
 export default UserOpTable;
