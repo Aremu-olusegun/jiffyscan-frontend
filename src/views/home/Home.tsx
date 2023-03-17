@@ -3,9 +3,66 @@ import IconButton from "@/components/common/icon_button/IconButton";
 import InfoButton from "@/components/common/InfoButton";
 import Footer from "@/components/globals/footer/Footer";
 import Link from "next/link";
-import {useRouter} from "next/router";
-import React from "react";
+import { useRouter } from "next/router";
+import React, { useState, useEffect } from "react";
 import Table from "./Table";
+import { ChipProps } from "@/components/common/chip/Chip";
+import * as moment from "moment";
+import { Chart } from "./Chart";
+
+type UserOp = {
+  id: string
+  transactionHash: string
+  userOpHash: string
+  sender: string
+  paymaster: string
+  nonce: number
+  actualGasCost: number
+  actualGasPrice: number
+  actualGasUsed: number
+  success: Boolean
+  revertReason: string
+  blockTime: number
+  blockNumber: number
+  network: String
+  input: string
+  target: string
+  callData: string
+  beneficiary: string
+  factory: string
+  value: number
+}
+
+type UserOps = UserOp[]
+
+type rows =  {
+  hash: {
+    text: string;
+    icon: string;
+  };
+  ago: string;
+  sender: string;
+  target: string;
+  fee: {
+    value: string;
+    gas: ChipProps;
+  };
+}[];
+
+type columns = {
+  name: string;
+  sort: boolean;
+}[];
+
+type dailyMetrics = dailyMetric[]
+
+type dailyMetric = {
+  userOpCounter:  number
+  totalFeeCollected: number
+  daySinceEpoch: number
+  bundleCounter: number
+  walletsCreated: number
+}
 
 const pages = [
   {
@@ -35,33 +92,138 @@ const pages = [
 
 const recentMetrics = [
   {
-    id: 5678,
+    id: 1,
     title: "Total number of UserOps",
     value: "760.34k",
     status: "20.5",
   },
   {
-    id: 3246,
+    id: 2,
     title: "Total Daily Gas Fee Paid",
     value: "760.34k",
     status: "20.5",
   },
   {
-    id: 8675,
+    id: 3,
     title: "Unique Transacting Wallets",
     value: "760.34k",
     status: "20.5",
   },
   {
-    id: 2345,
+    id: 4,
     title: "New Wallets Created",
     value: "760.34k",
     status: "20.5",
   },
 ];
 
+const columns: columns =  [
+  {name: "Hash", sort: true},
+  {name: "Age", sort: true},
+  {name: "Sender", sort: false},
+  {name: "Target", sort: false},
+  {name: "Fee", sort: true},
+]
+
+const createRowsObject = (userOps: UserOps): any[] => {
+  let rows: rows = [];
+  if (userOps === undefined) return rows;
+  for (let idx in userOps) {
+    let userOp: UserOp = userOps[idx];
+    let timePassedInEpoch = new Date().getTime() - userOp.blockTime * 1000;
+    let timePassedMoment = moment.duration(timePassedInEpoch);
+    let timePassed = timePassedMoment.humanize().replace('minutes', 'min') + ' ago';
+    rows.push({
+        hash: 
+        {
+              text: userOp.userOpHash,
+              icon: "/images/icon-container (10).svg",
+            },
+        ago: timePassed,
+        sender: userOp.sender,
+        target: userOp.target,
+        fee: {
+              value: userOp.actualGasCost.toString(),
+              gas: {
+                children: "ETH",
+                color: "info",
+              },
+            }
+    });
+  }
+  return rows;
+}
+
+
+
 function Home() {
-  const {pathname} = useRouter();
+  const { pathname } = useRouter();
+  const [rows, setRows] = useState<rows>([]);
+  const [network, setNetwork] = useState('mainnet');
+  const [dailyMetrics, setDailyMetrics] = useState([] as dailyMetric[]);
+  const [userOpMetric, setUserOpMetric] = useState([] as number[]);
+  const [walletsCreatedMetric, setWalletsCreatedMetric] = useState([] as number[]);
+  const [bundleMetric, setBundleMetric] = useState([] as number[]);
+  const [totalFeeCollectedMetric, setTotalFeeCollectedMetric] = useState([] as number[]);
+
+  const getChart = (id:number) => {
+    console.log(id,userOpMetric, totalFeeCollectedMetric, walletsCreatedMetric, bundleMetric)
+    if (id === 1) {
+      return <Chart chartValues={userOpMetric}/>
+    } else if (id === 2) {
+      return <Chart chartValues={totalFeeCollectedMetric}/>
+    } else if (id === 3) {
+      return <Chart chartValues={walletsCreatedMetric}/>
+    } else if (id === 4) {
+      return <Chart chartValues={bundleMetric}/>
+    }
+  }
+
+  useEffect(() => {
+    fetchUserOps(0, 10);
+    fetchDailyMetrics();
+  }, [network]);
+
+  useEffect(() => {
+    let userOpMetric = []
+    let walletsCreatedMetric = []
+    let bundleMetric = []
+    let totalFeeCollectedMetric = []
+    for (let i in dailyMetrics) {
+      userOpMetric.push(dailyMetrics[i].userOpCounter)
+      walletsCreatedMetric.push(dailyMetrics[i].walletsCreated)
+      bundleMetric.push(dailyMetrics[i].bundleCounter)
+      totalFeeCollectedMetric.push(dailyMetrics[i].totalFeeCollected)
+    }
+    setUserOpMetric(userOpMetric)
+    setWalletsCreatedMetric(walletsCreatedMetric)
+    setBundleMetric(bundleMetric)
+    setTotalFeeCollectedMetric(totalFeeCollectedMetric)
+  },[dailyMetrics])
+
+  const fetchUserOps = async (pageNo: number, pageSize: number) => {
+    const response = await fetch(
+      'https://api.jiffyscan.xyz/v0/getLatestUserOps?network=' + network + '&first=' + pageSize + '&skip=' + pageNo * pageSize
+    );
+    const userOpsFromResponse = await response.json();
+    if ('userOps' in userOpsFromResponse) {
+      const rows = createRowsObject(
+        userOpsFromResponse.userOps
+      );
+      console.log(rows.length)
+      setRows(rows);
+    }
+  }
+
+  const fetchDailyMetrics = async () => {
+    const response = await fetch(
+      'https://api.jiffyscan.xyz/v0/GetDailyMetrics?network=' + network + '&noOfDays=4'
+    );
+    const dailyMetricsResponse = await response.json();
+    if ('metrics' in dailyMetricsResponse) {
+      setDailyMetrics(dailyMetricsResponse.metrics);
+    }
+  }
 
   return (
     <div className="">
@@ -76,15 +238,14 @@ function Home() {
           </div>
           <div className="w-[1px] h-[40px] bg-black/[12%]" />
           <div className="flex items-center gap-6">
-            {pages.map(({id, name, url, dropdown}) => {
+            {pages.map(({ id, name, url, dropdown }) => {
               const current = url === pathname;
               return (
                 <Link
                   href={url}
                   key={id}
-                  className={`flex items-center gap-1 text-md tracking-[0.25px] underline-offset-[10px] decoration-2 ${
-                    current ? "underline" : "hover:no-underline"
-                  }`}
+                  className={`flex items-center gap-1 text-md tracking-[0.25px] underline-offset-[10px] decoration-2 ${current ? "underline" : "hover:no-underline"
+                    }`}
                 >
                   <span>{name}</span>
                   {dropdown && <img src="/images/icon-container.svg" alt="" />}
@@ -145,7 +306,7 @@ function Home() {
           </div>
           <div className="">
             <div className="grid grid-cols-4 gap-2">
-              {recentMetrics.map(({id, status, title, value}) => (
+              {recentMetrics.map(({ id, status, title, value }) => (
                 <div className="p-4 rounded border border-dark-200 bg-white shadow-200" key={id}>
                   <div className="flex items-center gap-1">
                     <span className="text-sm">{title}</span>
@@ -160,7 +321,8 @@ function Home() {
                     <img src="/images/icon-container (9).svg" alt="" />
                   </div>
                   <div>
-                    <img className="w-full" src="/images/graphs.svg" alt="" />
+                    {/* <img className="w-full" src="/images/graphs.svg" alt="" /> */}
+                    {getChart(id)}
                   </div>
                 </div>
               ))}
@@ -177,7 +339,7 @@ function Home() {
               <InfoButton />
             </div>
             <div>
-              <Table />
+              <Table tableData={{rows, columns}}/>
             </div>
           </div>
         </div>

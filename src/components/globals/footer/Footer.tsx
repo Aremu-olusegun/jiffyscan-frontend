@@ -1,5 +1,5 @@
 import IconButton from "@/components/common/icon_button/IconButton";
-import {Token} from "@/views/home/Table";
+import {Hash} from "@/views/home/Table";
 import Link from "next/link";
 import React from "react";
 
@@ -105,7 +105,7 @@ function Footer() {
             <img src="/images/icon-container (15).svg" alt="" />
             <span>Donations:</span>
             <div className="[&_span]:text-white">
-              <Token copyIcon="/images/content-copy.svg" text="0x37b415...C8329f" />
+              <Hash copyIcon="/images/content-copy.svg" text="0x37b415...C8329f" />
             </div>
           </div>
         </div>

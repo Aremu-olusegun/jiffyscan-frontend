@@ -7,7 +7,7 @@ interface tableDataT {
     sort: boolean;
   }[];
   rows: {
-    token: {
+    hash: {
       text: string;
       icon: string;
     };
@@ -20,276 +20,9 @@ interface tableDataT {
     };
   }[];
 }
+ 
 
-const tableData: tableDataT = {
-  columns: [
-    {name: "Hash", sort: true},
-    {name: "Age", sort: true},
-    {name: "Sender", sort: false},
-    {name: "Target", sort: false},
-    {name: "Fee", sort: true},
-  ],
-  rows: [
-    {
-      token: {
-        text: "0x2824r6o923dqe3d7f",
-        icon: "/images/icon-container (10).svg",
-      },
-      ago: "13 min ago",
-      sender: "0x2824r6o923dqe3d7f",
-      target: "0x2824r6o923dqe3d7f",
-      fee: {
-        value: "20513",
-        gas: {
-          children: "ETH",
-          color: "info",
-        },
-      },
-    },
-    {
-      token: {
-        text: "0x2824r6o923dqe3d7f",
-        icon: "/images/icon-container (10).svg",
-      },
-      ago: "13 min ago",
-      sender: "0x2824r6o923dqe3d7f",
-      target: "0x2824r6o923dqe3d7f",
-      fee: {
-        value: "20513",
-        gas: {
-          children: "GWEI",
-          color: "success",
-        },
-      },
-    },
-    {
-      token: {
-        text: "0x2824r6o923dqe3d7f",
-        icon: "/images/icon-container (12).svg",
-      },
-      ago: "13 min ago",
-      sender: "0x2824r6o923dqe3d7f",
-      target: "0x2824r6o923dqe3d7f",
-      fee: {
-        value: "20513",
-        gas: {
-          children: "ETH",
-          color: "info",
-        },
-      },
-    },
-    {
-      token: {
-        text: "0x2824r6o923dqe3d7f",
-        icon: "/images/icon-container (13).svg",
-      },
-      ago: "13 min ago",
-      sender: "0x2824r6o923dqe3d7f",
-      target: "0x2824r6o923dqe3d7f",
-      fee: {
-        value: "20513",
-        gas: {
-          children: "GWEI",
-          color: "success",
-        },
-      },
-    },
-    {
-      token: {
-        text: "0x2824r6o923dqe3d7f",
-        icon: "/images/icon-container (10).svg",
-      },
-      ago: "13 min ago",
-      sender: "0x2824r6o923dqe3d7f",
-      target: "0x2824r6o923dqe3d7f",
-      fee: {
-        value: "20513",
-        gas: {
-          children: "ETH",
-          color: "info",
-        },
-      },
-    },
-    {
-      token: {
-        text: "0x2824r6o923dqe3d7f",
-        icon: "/images/icon-container (10).svg",
-      },
-      ago: "13 min ago",
-      sender: "0x2824r6o923dqe3d7f",
-      target: "0x2824r6o923dqe3d7f",
-      fee: {
-        value: "20513",
-        gas: {
-          children: "GWEI",
-          color: "success",
-        },
-      },
-    },
-    {
-      token: {
-        text: "0x2824r6o923dqe3d7f",
-        icon: "/images/icon-container (12).svg",
-      },
-      ago: "13 min ago",
-      sender: "0x2824r6o923dqe3d7f",
-      target: "0x2824r6o923dqe3d7f",
-      fee: {
-        value: "20513",
-        gas: {
-          children: "ETH",
-          color: "info",
-        },
-      },
-    },
-    {
-      token: {
-        text: "0x2824r6o923dqe3d7f",
-        icon: "/images/icon-container (13).svg",
-      },
-      ago: "13 min ago",
-      sender: "0x2824r6o923dqe3d7f",
-      target: "0x2824r6o923dqe3d7f",
-      fee: {
-        value: "20513",
-        gas: {
-          children: "GWEI",
-          color: "success",
-        },
-      },
-    },
-    {
-      token: {
-        text: "0x2824r6o923dqe3d7f",
-        icon: "/images/icon-container (10).svg",
-      },
-      ago: "13 min ago",
-      sender: "0x2824r6o923dqe3d7f",
-      target: "0x2824r6o923dqe3d7f",
-      fee: {
-        value: "20513",
-        gas: {
-          children: "ETH",
-          color: "info",
-        },
-      },
-    },
-    {
-      token: {
-        text: "0x2824r6o923dqe3d7f",
-        icon: "/images/icon-container (10).svg",
-      },
-      ago: "13 min ago",
-      sender: "0x2824r6o923dqe3d7f",
-      target: "0x2824r6o923dqe3d7f",
-      fee: {
-        value: "20513",
-        gas: {
-          children: "GWEI",
-          color: "success",
-        },
-      },
-    },
-    {
-      token: {
-        text: "0x2824r6o923dqe3d7f",
-        icon: "/images/icon-container (12).svg",
-      },
-      ago: "13 min ago",
-      sender: "0x2824r6o923dqe3d7f",
-      target: "0x2824r6o923dqe3d7f",
-      fee: {
-        value: "20513",
-        gas: {
-          children: "ETH",
-          color: "info",
-        },
-      },
-    },
-    {
-      token: {
-        text: "0x2824r6o923dqe3d7f",
-        icon: "/images/icon-container (13).svg",
-      },
-      ago: "13 min ago",
-      sender: "0x2824r6o923dqe3d7f",
-      target: "0x2824r6o923dqe3d7f",
-      fee: {
-        value: "20513",
-        gas: {
-          children: "GWEI",
-          color: "success",
-        },
-      },
-    },
-    {
-      token: {
-        text: "0x2824r6o923dqe3d7f",
-        icon: "/images/icon-container (10).svg",
-      },
-      ago: "13 min ago",
-      sender: "0x2824r6o923dqe3d7f",
-      target: "0x2824r6o923dqe3d7f",
-      fee: {
-        value: "20513",
-        gas: {
-          children: "ETH",
-          color: "info",
-        },
-      },
-    },
-    {
-      token: {
-        text: "0x2824r6o923dqe3d7f",
-        icon: "/images/icon-container (10).svg",
-      },
-      ago: "13 min ago",
-      sender: "0x2824r6o923dqe3d7f",
-      target: "0x2824r6o923dqe3d7f",
-      fee: {
-        value: "20513",
-        gas: {
-          children: "GWEI",
-          color: "success",
-        },
-      },
-    },
-    {
-      token: {
-        text: "0x2824r6o923dqe3d7f",
-        icon: "/images/icon-container (12).svg",
-      },
-      ago: "13 min ago",
-      sender: "0x2824r6o923dqe3d7f",
-      target: "0x2824r6o923dqe3d7f",
-      fee: {
-        value: "20513",
-        gas: {
-          children: "ETH",
-          color: "info",
-        },
-      },
-    },
-    {
-      token: {
-        text: "0x2824r6o923dqe3d7f",
-        icon: "/images/icon-container (13).svg",
-      },
-      ago: "13 min ago",
-      sender: "0x2824r6o923dqe3d7f",
-      target: "0x2824r6o923dqe3d7f",
-      fee: {
-        value: "20513",
-        gas: {
-          children: "GWEI",
-          color: "success",
-        },
-      },
-    },
-  ],
-};
-
-function Table() {
+function Table({ tableData }: { tableData: tableDataT }) {
   return (
     <div>
       <div className="mb-2">
@@ -310,22 +43,24 @@ function Table() {
             </tr>
           </thead>
           <tbody>
-            {tableData.rows.map(({ago, fee, sender, target, token}, index) => (
+            
+            {tableData.rows.map(({ago, fee, sender, target, hash}, index) => (
+              
               <tr
                 key={index}
                 className="[&_td]:border-b [&_td]:border-dark-100 [&_td]:py-3.5 [&_td]:px-4 odd:bg-dark-25 hover:bg-dark-25"
               >
                 <td className="">
-                  <Token {...token} />
+                  <Hash {...hash} />
                 </td>
                 <td className="">
                   <span className="tracking-normal">{ago}</span>
                 </td>
                 <td className="">
-                  <Token text={sender} />
+                  <Hash text={sender} />
                 </td>
                 <td className="">
-                  <Token text={target} />
+                  <Hash text={target} />
                 </td>
                 <td className="">
                   <div className="flex items-center justify-end text-rgiht gap-2">
@@ -377,7 +112,7 @@ function SortingButton({text, sort = true}: {text: string; sort?: boolean}) {
   );
 }
 
-export function Token({icon, text, copyIcon}: {icon?: string; text: string; copyIcon?: string}) {
+export function Hash({icon, text, copyIcon}: {icon?: string; text: string; copyIcon?: string}) {
   return (
     <div className="flex items-center gap-2.5">
       {icon && <img src={icon} alt="" />}
@@ -390,6 +125,7 @@ export function Token({icon, text, copyIcon}: {icon?: string; text: string; copy
 }
 
 function shortenString(str: string) {
+  if (str == null) return '';
   if (str.length <= 10) {
     return str;
   }
